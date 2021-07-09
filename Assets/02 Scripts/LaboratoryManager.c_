@@ -1,0 +1,195 @@
+﻿using UnityEngine;
+using System;
+using System.Collections;
+using I2.Loc;
+
+public class LaboratoryManager : MonoBehaviour {
+
+	public GameObject[] UIButtons;
+    public GameObject[] MoveButtons;
+	private bool SelectedDoll = false;
+	private GameObject objectButton;
+	private bool MenuListOn = false;
+	private GameObject EasyTouchObj;
+
+    void Awake()
+    {
+        GameManager.LoadedScene = true;
+    }
+    
+	void Start () 
+	{
+        EasyTouchObj = GameObject.Find("EasyTouch");
+        objectButton = GameObject.Find("SelectDollButton");
+        foreach (GameObject obj in UIButtons)
+        {
+            if (obj == objectButton || obj.name == "StoreButton" || obj.name == "DevelopmentButton" || obj.name == "ReturnButton")
+            {
+                obj.SetActive(true);
+            }
+            else
+            {
+                obj.SetActive(false);
+            }
+        }
+//        this.gameObject.GetComponent<FadeandLoad>().LoadingIndicator = true;
+    }
+
+	// Update is called once per frame
+	void Update () 
+	{
+		if (Input.GetMouseButtonDown (0)) 
+		{
+			Vector2 worldPos = UICamera.currentCamera.ScreenToWorldPoint(Input.mousePosition);
+
+			//Debug.Log("worldPoint x:"+  worldPos.x + " y:" + worldPos.y);
+
+			Collider2D col2D = Physics2D.OverlapPoint(worldPos);
+
+			if (col2D)
+			{
+				//Debug.Log(col2D.transform.gameObject.name);
+
+				objectButton = col2D.transform.gameObject;
+
+				if (objectButton.name == "SelectDollButton")
+				{
+					SelectDoll(objectButton);
+				}
+				else if (objectButton.name == "ToLeftButton")
+				{
+                    LaboUnselectedCamera.PosNumber++;
+                    if (LaboUnselectedCamera.PosNumber > 7)
+                        LaboUnselectedCamera.PosNumber = 0;
+                    LaboUnselectedCamera._mouseX = LaboUnselectedCamera.MovingAngle * LaboUnselectedCamera.PosNumber;
+                }
+				else if (objectButton.name == "ToRightButton")
+				{
+                    LaboUnselectedCamera.PosNumber--;
+                    if (LaboUnselectedCamera.PosNumber < 0)
+                        LaboUnselectedCamera.PosNumber = 7;
+                    LaboUnselectedCamera._mouseX = LaboUnselectedCamera.MovingAngle * LaboUnselectedCamera.PosNumber;
+                }
+				else if (objectButton.name == "RightShoulderButton")
+				{
+					MenuListAppearance(objectButton);
+				}
+				else if (objectButton.name == "LeftShoulderButton")
+				{
+					MenuListAppearance(objectButton);
+				}
+				else if (objectButton.name == "RightHandButton")
+				{
+					MenuListAppearance(objectButton);
+				}
+				else if (objectButton.name == "LeftHandButton")
+				{
+					MenuListAppearance(objectButton);
+				}
+				else if (objectButton.name == "BackPackButton")
+				{
+					MenuListAppearance(objectButton);
+				}
+                else if (objectButton.name == "StoreButton")
+                {
+                    this.gameObject.GetComponent<FadeandLoad>().LoadSceneName = "Store";
+                    this.gameObject.GetComponent<FadeandLoad>().enabled = true;
+                }
+                else if (objectButton.name == "ReturnButton")
+                {
+                    this.gameObject.GetComponent<FadeandLoad>().LoadSceneName = "uMainMenu";
+                    this.gameObject.GetComponent<FadeandLoad>().LoadingIndicator = false;
+                    this.gameObject.GetComponent<FadeandLoad>().enabled = true;
+                }
+
+			}
+
+		}
+
+	}
+
+	private void SelectDoll(GameObject SelectButton)
+	{
+		SelectedDoll = !SelectedDoll;
+
+		UILabel lbl = SelectButton.GetComponentInChildren<UILabel> ();
+
+        LaboSelectedCamera._mouseXSmooth = 0;
+        LaboSelectedCamera._mouseYSmooth = 0;
+        LaboSelectedCamera._mouseX = 0;
+        LaboSelectedCamera._desiredMouseY = 0;
+        
+
+        if (SelectedDoll) 
+		{
+			Camera.main.GetComponent<LaboUnselectedCamera>().enabled = false;
+			Camera.main.GetComponent<LaboSelectedCamera>().enabled = true;
+
+            lbl.GetComponent<Localize>().SetTerm("Select Other Doll", null);
+
+			foreach (GameObject obj in UIButtons) 
+			{
+				obj.SetActive (true);
+			}
+            foreach (GameObject mbtn in MoveButtons)
+            {
+                mbtn.SetActive(false);
+            }
+        }
+		else 
+		{
+			Camera.main.GetComponent<LaboUnselectedCamera>().enabled = true;
+			Camera.main.GetComponent<LaboSelectedCamera>().enabled = false;
+
+			lbl.GetComponent<Localize>().SetTerm("Select This Doll", null);
+
+			foreach (GameObject obj in UIButtons)
+			{
+				if (obj == SelectButton || obj.name == "StoreButton" || obj.name == "DevelopmentButton" || obj.name == "ReturnButton")
+				{
+					obj.SetActive(true);
+				}
+				else 
+				{
+					obj.SetActive (false);
+				}
+			}
+            foreach (GameObject mbtn in MoveButtons)
+            {
+                mbtn.SetActive(true);
+            }
+        }
+
+        LaboSelectedCamera.TargetArray = null;
+	}
+
+	private void MoveCamera(string str)
+	{
+		Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, 45.0f);
+	}
+
+
+
+	private void MenuListAppearance(GameObject ActiveBottun)
+	{
+		MenuListOn = !MenuListOn;
+
+		foreach (GameObject obj in UIButtons)
+		{
+			if (obj.name != ActiveBottun.name && MenuListOn)
+			{
+				EasyTouchObj.SetActive(false);
+				obj.SetActive(false);
+				ActiveBottun.transform.FindChild("Scroll View").gameObject.SetActive(true);
+ 			}
+			else if (obj.name != objectButton.name && !MenuListOn) 
+			{
+				EasyTouchObj.SetActive(true);
+				obj.SetActive(true);
+				ActiveBottun.transform.FindChild("Scroll View").gameObject.SetActive(false);
+            }
+		}
+	}
+
+
+}

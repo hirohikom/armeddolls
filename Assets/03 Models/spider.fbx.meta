@@ -1,0 +1,129 @@
+fileFormatVersion: 2
+guid: 6c5e045088805f246b8e3cfa21c54800
+labels:
+- Robot
+- Spider
+- Mech
+- Bot
+- Machine
+- Vechicle
+- Droid
+- Lowpoly
+- Hardsurface
+- Game
+- Mobile
+- Drone
+- War
+- Scifi
+- Dsf
+- Future
+- Futuristic
+- Modern
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: arm_back_L
+    100002: arm_back_R
+    100004: arm_L
+    100006: arm_R
+    100008: Armature_SB
+    100010: claw_back_L
+    100012: claw_back_R
+    100014: claw_L
+    100016: claw_R
+    100018: hips
+    100020: root
+    100022: shoulder_back_L
+    100024: shoulder_back_R
+    100026: shoulder_L
+    100028: shoulder_R
+    100030: small_claw2_L
+    100032: small_claw2_R
+    100034: small_claw_L
+    100036: small_claw_R
+    100038: //RootNode
+    100040: spider
+    100042: torso
+    400000: arm_back_L
+    400002: arm_back_R
+    400004: arm_L
+    400006: arm_R
+    400008: Armature_SB
+    400010: claw_back_L
+    400012: claw_back_R
+    400014: claw_L
+    400016: claw_R
+    400018: hips
+    400020: root
+    400022: shoulder_back_L
+    400024: shoulder_back_R
+    400026: shoulder_L
+    400028: shoulder_R
+    400030: small_claw2_L
+    400032: small_claw2_R
+    400034: small_claw_L
+    400036: small_claw_R
+    400038: //RootNode
+    400040: spider
+    400042: torso
+    4300000: spider
+    9500000: //RootNode
+    13700000: spider
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 3
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: root
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

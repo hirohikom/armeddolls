@@ -1,0 +1,147 @@
+using UnityEngine;
+using System.Collections;
+
+public class WeaponControllerEx_RS : MonoBehaviour
+{
+	private string[] TargetTag;
+	public WeaponLauncherEx[] WeaponLists;
+	public int CurrentWeapon = 0;
+	public bool ShowCrosshair;
+	public GameObject LookTargetUp;
+	public GameObject LookTargetForward;
+	public GameObject ParentObject;
+    public Vector3 AimOffset = new Vector3(0, 1.0f, 0);
+    private GameObject AimObject;
+	public static bool isShoot = false;
+	public static bool isReady = false;
+
+    public PhotonView photonView;
+
+    void Awake ()
+	{
+        if (!photonView.isMine)
+        {
+            TargetTag = new string[1] { "Player" };
+        }
+        else
+        {
+            TargetTag = new string[1] { "Enemy" };
+        }
+        // find all attached weapons.
+        if (this.transform.GetComponentsInChildren (typeof(WeaponLauncherEx)).Length > 0) {
+			var weas = this.transform.GetComponentsInChildren (typeof(WeaponLauncherEx));
+			WeaponLists = new WeaponLauncherEx[weas.Length];
+			for (int i=0; i<weas.Length; i++) {
+				WeaponLists [i] = weas [i].GetComponent<WeaponLauncherEx> ();
+				WeaponLists [i].TargetTag = TargetTag;
+			}
+		}
+	}
+
+	public WeaponLauncherEx GetCurrentWeapon(){
+		if (CurrentWeapon < WeaponLists.Length && WeaponLists [CurrentWeapon] != null) {
+			return WeaponLists [CurrentWeapon];
+		}
+		return null;
+	}
+	
+	private void Start ()
+	{
+		for (int i=0; i < WeaponLists.Length; i++) {
+			if (WeaponLists [i] != null) {
+				WeaponLists [i].TargetTag = TargetTag;
+				WeaponLists [i].ShowCrosshair = ShowCrosshair;
+			}
+		}
+	}
+
+	private void Update ()
+	{
+        if (!photonView.isMine)
+        {
+            AimObject = AimingTarget2.CurrentAimedObject;
+        }
+        else
+        {
+            AimObject = AimingTarget.CurrentAimedObject;
+        }
+        if (AimObject != null)
+        {
+			SetAttackPosition ();
+			transform.LookAt (AimObject.transform.position + AimOffset);
+		}
+        else if (isShoot)
+        {
+			SetAttackPosition ();
+        }
+        else
+        {
+			ReleaseAttackPosition();
+		}
+
+		for (int i = 0; i < WeaponLists.Length; i++)
+        {
+			if (WeaponLists [i] != null)
+            {
+				WeaponLists [i].OnActive = false;
+			}
+		}
+		if (CurrentWeapon < WeaponLists.Length && WeaponLists [CurrentWeapon] != null)
+        {
+			WeaponLists [CurrentWeapon].OnActive = true;
+		}
+	}
+
+	public void SetAttackPosition()
+	{
+		ParentObject.transform.LookAt (LookTargetForward.transform.position);
+		transform.LookAt (LookTargetForward.transform.position);
+		isReady = true;
+	}
+
+	public void ReleaseAttackPosition()
+	{
+		isReady = false;
+		ParentObject.transform.LookAt (LookTargetUp.transform.position);
+		ParentObject.transform.Rotate(0, 0, 90.0f);
+		transform.LookAt (LookTargetUp.transform.position);
+	}
+		
+	public void LaunchWeapon (int index)
+	{
+        if (!photonView.isMine)
+        {
+            return;
+        }
+        CurrentWeapon = index;
+		if (CurrentWeapon < WeaponLists.Length && WeaponLists [index] != null && isReady)
+        {
+			WeaponLists [index].photonView.RPC("Shoot", PhotonTargets.All);
+        }
+	}
+	
+	public void SwitchWeapon ()
+	{
+        if (!photonView.isMine)
+        {
+            return;
+        }
+        CurrentWeapon += 1;
+		if (CurrentWeapon >= WeaponLists.Length)
+        {
+			CurrentWeapon = 0;	
+		}
+	}
+	
+	public void LaunchWeapon ()
+	{
+        if (!photonView.isMine)
+        {
+            return;
+        }
+        if (CurrentWeapon < WeaponLists.Length && WeaponLists [CurrentWeapon] != null && isReady)
+        {
+			WeaponLists [CurrentWeapon].photonView.RPC("Shoot", PhotonTargets.All);
+        }
+	}
+}

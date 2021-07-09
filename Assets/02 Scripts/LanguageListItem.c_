@@ -1,0 +1,78 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using EnhancedUI.EnhancedScroller;
+using I2.Loc;
+
+public class LanguageListItem : EnhancedScrollerCellView
+{
+
+    public ScrollerData data { get; private set; }
+	
+	public UnityEngine.UI.Text LanguageNameText;
+
+	public bool setDefaultLanguage = false;
+
+	public string defaultLangage = "English";
+
+    private Localize lcz;
+	
+	void Start () 
+	{
+        lcz = GetComponent<Localize>();
+
+		if (setDefaultLanguage)
+			lcz.SetGlobalLanguage(defaultLangage);
+	}
+	
+	public void SetData(object objectData)
+	{
+//		base.SetData (objectData);
+
+        data = objectData as ScrollerData;
+
+		LanguageNameText.text = data.languageName;
+	}
+
+	public void ChangeLanguage()
+	{
+		StartCoroutine ("ChangeLang");
+	}
+
+	IEnumerator ChangeLang()
+	{
+		switch (LanguageNameText.text)
+		{
+		case "Français": 
+			lcz.SetGlobalLanguage("French");
+			break;
+		case "Español":
+			lcz.SetGlobalLanguage("Spanish");
+			break;
+		case "Português":
+			lcz.SetGlobalLanguage("Portuguese");
+			break;
+		case "العربية":
+			lcz.SetGlobalLanguage("Arabic");
+			break;
+		case "中文（简体字）":
+			lcz.SetGlobalLanguage("Chinese (Simplified)");
+			break;
+		case "中文（繁体字）":
+			lcz.SetGlobalLanguage("Chinese (Traditional)");
+			break;
+		case "한국어":
+			lcz.SetGlobalLanguage("Korean");
+			break;
+		case "日本語":
+			lcz.SetGlobalLanguage("Japanese");
+			break;
+		default:
+			lcz.SetGlobalLanguage("English");
+			break;
+		}
+		
+		yield return null;
+	}
+	
+}
